@@ -1,0 +1,1344 @@
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE  1
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+                      00001 ;--------------------------------------------------------
+                      00002 ; File Created by SDCC : free open source ANSI-C Compiler
+                      00003 ; Version 3.5.0 #9253 (Jun 20 2015) (MINGW32)
+                      00004 ; This file was generated Tue Mar 31 02:49:33 2020
+                      00005 ;--------------------------------------------------------
+                      00006 ; PIC port for the 14-bit core
+                      00007 ;--------------------------------------------------------
+                      00008         .file   "Timer_delay.c"
+                      00009         list    p=16f877a
+                      00010         radix dec
+                      00011         include "p16f877a.inc"
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ; Build date : Aug 07 2014
+                      00005 ;  MPASM PIC16F877A processor include
+                      00006 ; 
+                      00007 ;  (c) Copyright 1999-2014 Microchip Technology, All rights reserved
+                      00008 ;==========================================================================
+                      00009 
+                      00567         LIST
+                      00012 ;--------------------------------------------------------
+                      00013 ; external declarations
+                      00014 ;--------------------------------------------------------
+  0000                00015         extern  __print_format
+  0000                00016         extern  _printf_small
+  0000                00017         extern  _printf
+  0000                00018         extern  _vprintf
+  0000                00019         extern  _sprintf
+  0000                00020         extern  _vsprintf
+  0000                00021         extern  _puts
+  0000                00022         extern  _gets
+  0000                00023         extern  _getchar
+  0000                00024         extern  _putchar
+  0000                00025         extern  _calloc
+  0000                00026         extern  _malloc
+  0000                00027         extern  _realloc
+  0000                00028         extern  _free
+  0000                00029         extern  _abs
+  0000                00030         extern  _labs
+  0000                00031         extern  _atof
+  0000                00032         extern  _atoi
+  0000                00033         extern  _atol
+  0000                00034         extern  __uitoa
+  0000                00035         extern  __itoa
+  0000                00036         extern  __ultoa
+  0000                00037         extern  __ltoa
+  0000                00038         extern  _rand
+  0000                00039         extern  _srand
+  0000                00040         extern  _STATUSbits
+  0000                00041         extern  _PORTAbits
+  0000                00042         extern  _PORTBbits
+  0000                00043         extern  _PORTCbits
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE  2
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+  0000                00044         extern  _PORTDbits
+  0000                00045         extern  _PORTEbits
+  0000                00046         extern  _INTCONbits
+  0000                00047         extern  _PIR1bits
+  0000                00048         extern  _PIR2bits
+  0000                00049         extern  _T1CONbits
+  0000                00050         extern  _T2CONbits
+  0000                00051         extern  _SSPCONbits
+  0000                00052         extern  _CCP1CONbits
+  0000                00053         extern  _RCSTAbits
+  0000                00054         extern  _CCP2CONbits
+  0000                00055         extern  _ADCON0bits
+  0000                00056         extern  _OPTION_REGbits
+  0000                00057         extern  _TRISAbits
+  0000                00058         extern  _TRISBbits
+  0000                00059         extern  _TRISCbits
+  0000                00060         extern  _TRISDbits
+  0000                00061         extern  _TRISEbits
+  0000                00062         extern  _PIE1bits
+  0000                00063         extern  _PIE2bits
+  0000                00064         extern  _PCONbits
+  0000                00065         extern  _SSPCON2bits
+  0000                00066         extern  _SSPSTATbits
+  0000                00067         extern  _TXSTAbits
+  0000                00068         extern  _CMCONbits
+  0000                00069         extern  _CVRCONbits
+  0000                00070         extern  _ADCON1bits
+  0000                00071         extern  _EECON1bits
+  0000                00072         extern  _INDF
+  0000                00073         extern  _TMR0
+  0000                00074         extern  _PCL
+  0000                00075         extern  _STATUS
+  0000                00076         extern  _FSR
+  0000                00077         extern  _PORTA
+  0000                00078         extern  _PORTB
+  0000                00079         extern  _PORTC
+  0000                00080         extern  _PORTD
+  0000                00081         extern  _PORTE
+  0000                00082         extern  _PCLATH
+  0000                00083         extern  _INTCON
+  0000                00084         extern  _PIR1
+  0000                00085         extern  _PIR2
+  0000                00086         extern  _TMR1
+  0000                00087         extern  _TMR1L
+  0000                00088         extern  _TMR1H
+  0000                00089         extern  _T1CON
+  0000                00090         extern  _TMR2
+  0000                00091         extern  _T2CON
+  0000                00092         extern  _SSPBUF
+  0000                00093         extern  _SSPCON
+  0000                00094         extern  _CCPR1
+  0000                00095         extern  _CCPR1L
+  0000                00096         extern  _CCPR1H
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE  3
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+  0000                00097         extern  _CCP1CON
+  0000                00098         extern  _RCSTA
+  0000                00099         extern  _TXREG
+  0000                00100         extern  _RCREG
+  0000                00101         extern  _CCPR2
+  0000                00102         extern  _CCPR2L
+  0000                00103         extern  _CCPR2H
+  0000                00104         extern  _CCP2CON
+  0000                00105         extern  _ADRESH
+  0000                00106         extern  _ADCON0
+  0000                00107         extern  _OPTION_REG
+  0000                00108         extern  _TRISA
+  0000                00109         extern  _TRISB
+  0000                00110         extern  _TRISC
+  0000                00111         extern  _TRISD
+  0000                00112         extern  _TRISE
+  0000                00113         extern  _PIE1
+  0000                00114         extern  _PIE2
+  0000                00115         extern  _PCON
+  0000                00116         extern  _SSPCON2
+  0000                00117         extern  _PR2
+  0000                00118         extern  _SSPADD
+  0000                00119         extern  _SSPSTAT
+  0000                00120         extern  _TXSTA
+  0000                00121         extern  _SPBRG
+  0000                00122         extern  _CMCON
+  0000                00123         extern  _CVRCON
+  0000                00124         extern  _ADRESL
+  0000                00125         extern  _ADCON1
+  0000                00126         extern  _EEDATA
+  0000                00127         extern  _EEADR
+  0000                00128         extern  _EEDATH
+  0000                00129         extern  _EEADRH
+  0000                00130         extern  _EECON1
+  0000                00131         extern  _EECON2
+                      00132 
+  0000                00133         extern PSAVE
+  0000                00134         extern SSAVE
+  0000                00135         extern WSAVE
+  0000                00136         extern STK12
+  0000                00137         extern STK11
+  0000                00138         extern STK10
+  0000                00139         extern STK09
+  0000                00140         extern STK08
+  0000                00141         extern STK07
+  0000                00142         extern STK06
+  0000                00143         extern STK05
+  0000                00144         extern STK04
+  0000                00145         extern STK03
+  0000                00146         extern STK02
+  0000                00147         extern STK01
+  0000                00148         extern STK00
+                      00149 ;--------------------------------------------------------
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE  4
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+                      00150 ; global declarations
+                      00151 ;--------------------------------------------------------
+  0000                00152         global  _TMR_Delay_MS
+  0000                00153         global  _Delay_Stop
+  0000                00154         global  _TMR_Delay_CheckOverFlow
+  0000                00155         global  _Delay_Start
+  0000                00156         global  _Delay_Init
+                      00157 
+                      00158 ;--------------------------------------------------------
+                      00159 ; global definitions
+                      00160 ;--------------------------------------------------------
+                      00161 ;--------------------------------------------------------
+                      00162 ; absolute symbol definitions
+                      00163 ;--------------------------------------------------------
+                      00164 ;--------------------------------------------------------
+                      00165 ; compiler-defined variables
+                      00166 ;--------------------------------------------------------
+                      00167 UDL_Timer_delay_0       udata
+0000                  00168 r0x1000 res     1
+0001                  00169 r0x1002 res     1
+0002                  00170 r0x1001 res     1
+0003                  00171 r0x1003 res     1
+0004                  00172 r0x1004 res     1
+0005                  00173 r0x1005 res     1
+                      00174 ;--------------------------------------------------------
+                      00175 ; initialized data
+                      00176 ;--------------------------------------------------------
+                      00177 ;--------------------------------------------------------
+                      00178 ; overlayable items in internal ram 
+                      00179 ;--------------------------------------------------------
+                      00180 ;       udata_ovr
+                      00181 ;--------------------------------------------------------
+                      00182 ; code
+                      00183 ;--------------------------------------------------------
+                      00184 code_Timer_delay        code
+                      00185 ;***
+                      00186 ;  pBlock Stats: dbName = C
+                      00187 ;***
+                      00188 ;entry:  _TMR_Delay_MS  ;Function start
+                      00189 ; 2 exit points
+                      00190 ;has an exit
+                      00191 ;functions called:
+                      00192 ;   _Delay_Start
+                      00193 ;   _TMR_Delay_CheckOverFlow
+                      00194 ;   _Delay_Stop
+                      00195 ;   _Delay_Start
+                      00196 ;   _TMR_Delay_CheckOverFlow
+                      00197 ;   _Delay_Stop
+                      00198 ;6 compiler assigned registers:
+                      00199 ;   r0x1001
+                      00200 ;   STK00
+                      00201 ;   r0x1002
+                      00202 ;   r0x1003
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE  5
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+                      00203 ;   r0x1004
+                      00204 ;   r0x1005
+                      00205 ;; Starting pCode block
+                      00206 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00207 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2760:genLabel *{*
+                      00208 ;; ***  genLabel  2763
+                      00209 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00210 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2340:genFunction *{*
+                      00211 ;; ***  genFunction  2342 curr label offset=16previous max_key=0 
+0000                  00212 _TMR_Delay_MS   ;Function start
+                      00213 ; 2 exit points
+                      00214 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00215 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:7358:genReceive *{*
+                      00216 ;; ***  genReceive  7359
+                      00217 ;;      694 register type nRegs=2
+                      00218 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:1907:assignResultValue *{*
+                      00219 ;; ***  assignResultValue  1909
+                      00220 ;;      line = 1911 result -=-, size=0, left AOP_REG=r0x1049, size=2, right -=-, size=0
+                      00221 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:1393:movwf
+                      00222 ;;      1109 rIdx = r0x104A 
+                      00223         .line   57; "Timer_delay.c"     void TMR_Delay_MS(tWord delay)
+0000   ???? ????      00224         BANKSEL r0x1001
+0002   00??           00225         MOVWF   r0x1001
+                      00226 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:1423:get_returnvalue
+                      00227 ;; ***  popRegFromIdx,1042  , rIdx=0x7f
+0003   08??           00228         MOVF    STK00,W
+                      00229 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:1393:movwf
+                      00230 ;;      1109 rIdx = r0x1049 
+0004   00??           00231         MOVWF   r0x1002
+                      00232 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00233 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6927:genAssign *{*
+                      00234 ;; ***  genAssign  6928
+                      00235 ;; ***  aopForSym 315
+                      00236 ;;      327 sym->rname = _TMR2, size = 1
+                      00237 ;;      line = 6937 result AOP_DIR=_TMR2, size=1, left -=-, size=0, right AOP_LIT=0x83, size=1
+                      00238 ;; ***  genAssign  7023
+                      00239 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:7030:genAssign
+                      00240         .line   61; "Timer_delay.c"     TMR_DELAY_REG_VAL(131);
+0005   3083           00241         MOVLW   0x83
+                      00242 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:7032:genAssign
+                      00243 ;;      1009
+                      00244 ;;      1028  _TMR2   offset=0
+0006   ???? ????      00245         BANKSEL _TMR2
+0008   00??           00246         MOVWF   _TMR2
+                      00247 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00248 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6927:genAssign *{*
+                      00249 ;; ***  genAssign  6928
+                      00250 ;;      694 register type nRegs=1
+                      00251 ;;      line = 6937 result AOP_REG=r0x104B, size=1, left -=-, size=0, right AOP_LIT=0x00, size=1
+                      00252 ;; ***  genAssign  7023
+                      00253 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:7035:genAssign
+                      00254 ;;      1109 rIdx = r0x104B 
+                      00255         .line   62; "Timer_delay.c"     for(count=0;count<delay;count++)
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE  6
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+0009   ???? ????      00256         BANKSEL r0x1003
+000B   01??           00257         CLRF    r0x1003
+                      00258 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00259 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2760:genLabel *{*
+                      00260 ;; ***  genLabel  2763
+                      00261 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00262 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:7120:genCast *{*
+                      00263 ;; ***  genCast  7121
+                      00264 ;;      694 register type nRegs=1
+                      00265 ;;      694 register type nRegs=2
+                      00266 ;;      line = 7129 result AOP_REG=r0x104C, size=2, left -=-, size=0, right AOP_REG=r0x104B, size=1
+                      00267 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:7298:genCast
+                      00268 ;;      1109 rIdx = r0x104B 
+000C                  00269 _00126_DS_
+000C   ???? ????      00270         BANKSEL r0x1003
+000E   08??           00271         MOVF    r0x1003,W
+                      00272 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:7299:genCast
+                      00273 ;;      1109 rIdx = r0x104C 
+000F   00??           00274         MOVWF   r0x1004
+                      00275 ;; ***  addSign  861
+                      00276 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/genarith.c:862:addSign *{*
+                      00277 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/genarith.c:881:addSign
+                      00278 ;;      1109 rIdx = r0x104D 
+0010   01??           00279         CLRF    r0x1005
+                      00280 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00281 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:3583:genCmpLt *{*
+                      00282 ;; ***  genCmpLt  3584
+                      00283 ;;      694 register type nRegs=2
+                      00284 ;;      694 register type nRegs=2
+                      00285 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:3294:genCmp *{*
+                      00286 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:3269:pic14_mov2w_regOrLit
+                      00287 ;;      1109 rIdx = r0x104A 
+0011   08??           00288         MOVF    r0x1001,W
+                      00289 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:3432:genCmp
+                      00290 ;;      1109 rIdx = r0x104D 
+0012   02??           00291         SUBWF   r0x1005,W
+                      00292 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:3477:genCmp
+0013   1D03           00293         BTFSS   STATUS,2
+                      00294 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:3478:genCmp
+                      00295 ;; ***  popGetLabel  key=23, label offset 20
+0014   2???           00296         GOTO    _00143_DS_
+                      00297 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:3269:pic14_mov2w_regOrLit
+                      00298 ;;      1109 rIdx = r0x1049 
+0015   08??           00299         MOVF    r0x1002,W
+                      00300 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:3480:genCmp
+                      00301 ;;      1109 rIdx = r0x104C 
+0016   02??           00302         SUBWF   r0x1004,W
+                      00303 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:3237:genSkipc *{*
+                      00304 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:3242:genSkipc
+0017                  00305 _00143_DS_
+0017   1803           00306         BTFSC   STATUS,0
+                      00307 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:3246:genSkipc
+                      00308 ;; ***  popGetLabel  key=8, label offset 20
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE  7
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+0018   2???           00309         GOTO    _00128_DS_
+                      00310 ;;genSkipc:3247: created from rifx:027A5DF4
+                      00311 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00312 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00313 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2086:genCall *{*
+                      00314 ;; ***  genCall  2088
+                      00315 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:1801:saveRegisters *{*
+                      00316 ;; ***  saveRegisters  1803
+                      00317 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2175:genCall
+                      00318         .line   64; "Timer_delay.c"     Delay_Start();
+0019   2???           00319         CALL    _Delay_Start
+                      00320 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:1845:unsaveRegisters *{*
+                      00321 ;; ***  unsaveRegisters  1847
+                      00322 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00323 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2760:genLabel *{*
+                      00324 ;; ***  genLabel  2763
+                      00325 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00326 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2086:genCall *{*
+                      00327 ;; ***  genCall  2088
+                      00328 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:1801:saveRegisters *{*
+                      00329 ;; ***  saveRegisters  1803
+                      00330 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2175:genCall
+001A                  00331 _00121_DS_
+                      00332         .line   65; "Timer_delay.c"     while(TMR_Delay_CheckOverFlow()==0);
+001A   2???           00333         CALL    _TMR_Delay_CheckOverFlow
+                      00334 ;;      694 register type nRegs=1
+                      00335 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:1907:assignResultValue *{*
+                      00336 ;; ***  assignResultValue  1909
+                      00337 ;;      line = 1911 result -=-, size=0, left AOP_REG=r0x104C, size=1, right -=-, size=0
+                      00338 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:1393:movwf
+                      00339 ;;      1109 rIdx = r0x104C 
+001B   ???? ????      00340         BANKSEL r0x1004
+001D   00??           00341         MOVWF   r0x1004
+                      00342 ;;      2195 left AOP_REG
+                      00343 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:1845:unsaveRegisters *{*
+                      00344 ;; ***  unsaveRegisters  1847
+                      00345 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00346 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6759:genIfx *{*
+                      00347 ;; ***  genIfx  6760
+                      00348 ;;      694 register type nRegs=1
+                      00349 ;; ***  pic14_toBoolean  1515
+                      00350 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:1522:pic14_toBoolean
+001E   08??           00351         MOVF    r0x1004,W
+001F   1903           00352         BTFSC   STATUS,2
+                      00353 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6814:genIfx
+                      00354 ;; ***  popGetLabel  key=1, label offset 20
+0020   2???           00355         GOTO    _00121_DS_
+                      00356 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00357 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2086:genCall *{*
+                      00358 ;; ***  genCall  2088
+                      00359 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:1801:saveRegisters *{*
+                      00360 ;; ***  saveRegisters  1803
+                      00361 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2175:genCall
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE  8
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+                      00362         .line   66; "Timer_delay.c"     Delay_Stop();
+0021   2???           00363         CALL    _Delay_Stop
+                      00364 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:1845:unsaveRegisters *{*
+                      00365 ;; ***  unsaveRegisters  1847
+                      00366 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00367 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6927:genAssign *{*
+                      00368 ;; ***  genAssign  6928
+                      00369 ;; ***  aopForSym 315
+                      00370 ;;      327 sym->rname = _TMR2, size = 1
+                      00371 ;;      line = 6937 result AOP_DIR=_TMR2, size=1, left -=-, size=0, right AOP_LIT=0x84, size=1
+                      00372 ;; ***  genAssign  7023
+                      00373 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:7030:genAssign
+                      00374         .line   67; "Timer_delay.c"     TMR_DELAY_UPDATE_REG_VAL(132);
+0022   3084           00375         MOVLW   0x84
+                      00376 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:7032:genAssign
+                      00377 ;;      1009
+                      00378 ;;      1028  _TMR2   offset=0
+0023   ???? ????      00379         BANKSEL _TMR2
+0025   00??           00380         MOVWF   _TMR2
+                      00381 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00382 ;; ***  genPlus  611
+                      00383 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/genarith.c:612:genPlus *{*
+                      00384 ;;      694 register type nRegs=1
+                      00385 ;;      575
+                      00386 ;;      line = 618 result AOP_REG=r0x104B, size=1, left AOP_REG=r0x104B, size=1, right AOP_LIT=0x01, siz
+                            e=1
+                      00387 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/genarith.c:142:genPlusIncr *{*
+                      00388 ;; ***  genPlusIncr  144
+                      00389 ;;      result AOP_REG, left AOP_REG, right AOP_LIT
+                      00390 ;;      genPlusIncr  156
+                      00391 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/genarith.c:168:genPlusIncr
+                      00392 ;;      1109 rIdx = r0x104B 
+                      00393         .line   62; "Timer_delay.c"     for(count=0;count<delay;count++)
+0026   ???? ????      00394         BANKSEL r0x1003
+0028   0A??           00395         INCF    r0x1003,F
+                      00396 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00397 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2778:genGoto *{*
+                      00398 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2780:genGoto
+                      00399 ;; ***  popGetLabel  key=6, label offset 20
+0029   2???           00400         GOTO    _00126_DS_
+                      00401 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00402 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2760:genLabel *{*
+                      00403 ;; ***  genLabel  2763
+                      00404 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00405 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2528:genEndFunction *{*
+                      00406 ;; ***  genEndFunction  2530
+002A                  00407 _00128_DS_
+002A   0008           00408         RETURN  
+                      00409 ; exit point of _TMR_Delay_MS
+                      00410 
+                      00411 ;***
+                      00412 ;  pBlock Stats: dbName = C
+                      00413 ;***
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE  9
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+                      00414 ;entry:  _Delay_Stop    ;Function start
+                      00415 ; 2 exit points
+                      00416 ;has an exit
+                      00417 ;; Starting pCode block
+                      00418 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00419 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2760:genLabel *{*
+                      00420 ;; ***  genLabel  2763
+                      00421 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00422 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2340:genFunction *{*
+                      00423 ;; ***  genFunction  2342 curr label offset=12previous max_key=0 
+002B                  00424 _Delay_Stop     ;Function start
+                      00425 ; 2 exit points
+                      00426 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00427 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00428 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6686:genPointerSet *{*
+                      00429 ;; ***  genPointerSet  6687
+                      00430 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6505:genNearPointerSet *{*
+                      00431 ;; ***  genNearPointerSet  6506
+                      00432 ;;      613
+                      00433 ;;      aopForRemat 392
+                      00434 ;;      418: rname _T2CONbits, val 0, const = 0
+                      00435 ;; ***  genNearPointerSet  6521
+                      00436 ;;      833: aopGet AOP_PCODE type PO_IMMEDIATE
+                      00437 ;;      _T2CONbits
+                      00438 ;;      line = 6523 result AOP_PCODE=_T2CONbits, size=2, left -=-, size=0, right AOP_LIT=0x00, size=1
+                      00439 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6249:genPackBits *{*
+                      00440 ;; ***  genPackBits  6250
+                      00441 ;;      833: aopGet AOP_PCODE type PO_IMMEDIATE
+                      00442 ;;      _T2CONbits
+                      00443 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6275:genPackBits
+                      00444         .line   48; "Timer_delay.c"     TMR_DELAY_DISABLE;
+002B   ???? ????      00445         BANKSEL _T2CONbits
+002D   11??           00446         BCF     _T2CONbits,2
+                      00447 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00448 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2760:genLabel *{*
+                      00449 ;; ***  genLabel  2763
+                      00450 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00451 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2528:genEndFunction *{*
+                      00452 ;; ***  genEndFunction  2530
+002E   0008           00453         RETURN  
+                      00454 ; exit point of _Delay_Stop
+                      00455 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:7426:genpic14Code *{*
+                      00456 
+                      00457 ;***
+                      00458 ;  pBlock Stats: dbName = C
+                      00459 ;***
+                      00460 ;entry:  _TMR_Delay_CheckOverFlow       ;Function start
+                      00461 ; 2 exit points
+                      00462 ;has an exit
+                      00463 ;1 compiler assigned register :
+                      00464 ;   r0x1000
+                      00465 ;; Starting pCode block
+                      00466 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE 10
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+                      00467 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2760:genLabel *{*
+                      00468 ;; ***  genLabel  2763
+                      00469 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00470 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2340:genFunction *{*
+                      00471 ;; ***  genFunction  2342 curr label offset=8previous max_key=0 
+002F                  00472 _TMR_Delay_CheckOverFlow        ;Function start
+                      00473 ; 2 exit points
+                      00474 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00475 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00476 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6162:genPointerGet *{*
+                      00477 ;; ***  genPointerGet  6163
+                      00478 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:5944:genNearPointerGet *{*
+                      00479 ;; ***  genNearPointerGet  5945
+                      00480 ;;      613
+                      00481 ;;      aopForRemat 392
+                      00482 ;;      418: rname _PIR1bits, val 0, const = 0
+                      00483 ;; ***  genNearPointerGet  5961
+                      00484 ;;      694 register type nRegs=1
+                      00485 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:5760:genUnpackBits *{*
+                      00486 ;; ***  genUnpackBits  5761
+                      00487 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:5799:genUnpackBits
+                      00488 ;;      1109 rIdx = r0x1048 
+                      00489         .line   38; "Timer_delay.c"     return TMR_DELAY_GET_FLAG;
+002F   ???? ????      00490         BANKSEL r0x1000
+0031   01??           00491         CLRF    r0x1000
+                      00492 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:5805:genUnpackBits
+                      00493 ;;      833: aopGet AOP_PCODE type PO_IMMEDIATE
+                      00494 ;;      _PIR1bits
+0032   ???? ????      00495         BANKSEL _PIR1bits
+0034   1C??           00496         BTFSS   _PIR1bits,1
+0035   2???           00497         GOTO    _00001_DS_
+                      00498 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:5835:genUnpackBits
+                      00499 ;;      1109 rIdx = r0x1048 
+0036   ???? ????      00500         BANKSEL r0x1000
+0038   0A??           00501         INCF    r0x1000,F
+                      00502 ;; ***  addSign  861
+                      00503 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/genarith.c:862:addSign *{*
+                      00504 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00505 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2683:genRet *{*
+                      00506 ;; ***  genRet  2685
+                      00507 ;;      694 register type nRegs=1
+                      00508 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:1343:mov2w_op *{*
+                      00509 ;; ***  mov2w  1381  offset=0
+                      00510 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:1386:mov2w
+                      00511 ;;      1109 rIdx = r0x1048 
+0039                  00512 _00001_DS_
+0039   ???? ????      00513         BANKSEL r0x1000
+003B   08??           00514         MOVF    r0x1000,W
+                      00515 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00516 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2760:genLabel *{*
+                      00517 ;; ***  genLabel  2763
+                      00518 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00519 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2528:genEndFunction *{*
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE 11
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+                      00520 ;; ***  genEndFunction  2530
+003C   0008           00521         RETURN  
+                      00522 ; exit point of _TMR_Delay_CheckOverFlow
+                      00523 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:7426:genpic14Code *{*
+                      00524 
+                      00525 ;***
+                      00526 ;  pBlock Stats: dbName = C
+                      00527 ;***
+                      00528 ;entry:  _Delay_Start   ;Function start
+                      00529 ; 2 exit points
+                      00530 ;has an exit
+                      00531 ;; Starting pCode block
+                      00532 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00533 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2760:genLabel *{*
+                      00534 ;; ***  genLabel  2763
+                      00535 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00536 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2340:genFunction *{*
+                      00537 ;; ***  genFunction  2342 curr label offset=4previous max_key=0 
+003D                  00538 _Delay_Start    ;Function start
+                      00539 ; 2 exit points
+                      00540 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00541 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00542 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6686:genPointerSet *{*
+                      00543 ;; ***  genPointerSet  6687
+                      00544 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6505:genNearPointerSet *{*
+                      00545 ;; ***  genNearPointerSet  6506
+                      00546 ;;      613
+                      00547 ;;      aopForRemat 392
+                      00548 ;;      418: rname _PIR1bits, val 0, const = 0
+                      00549 ;; ***  genNearPointerSet  6521
+                      00550 ;;      833: aopGet AOP_PCODE type PO_IMMEDIATE
+                      00551 ;;      _PIR1bits
+                      00552 ;;      line = 6523 result AOP_PCODE=_PIR1bits, size=2, left -=-, size=0, right AOP_LIT=0x00, size=1
+                      00553 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6249:genPackBits *{*
+                      00554 ;; ***  genPackBits  6250
+                      00555 ;;      833: aopGet AOP_PCODE type PO_IMMEDIATE
+                      00556 ;;      _PIR1bits
+                      00557 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6275:genPackBits
+                      00558         .line   27; "Timer_delay.c"     TMR_DELAY_CLEAR_FLAG;
+003D   ???? ????      00559         BANKSEL _PIR1bits
+003F   10??           00560         BCF     _PIR1bits,1
+                      00561 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00562 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00563 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6686:genPointerSet *{*
+                      00564 ;; ***  genPointerSet  6687
+                      00565 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6505:genNearPointerSet *{*
+                      00566 ;; ***  genNearPointerSet  6506
+                      00567 ;;      613
+                      00568 ;;      aopForRemat 392
+                      00569 ;;      418: rname _T2CONbits, val 0, const = 0
+                      00570 ;; ***  genNearPointerSet  6521
+                      00571 ;;      833: aopGet AOP_PCODE type PO_IMMEDIATE
+                      00572 ;;      _T2CONbits
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE 12
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+                      00573 ;;      line = 6523 result AOP_PCODE=_T2CONbits, size=2, left -=-, size=0, right AOP_LIT=0x01, size=1
+                      00574 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6249:genPackBits *{*
+                      00575 ;; ***  genPackBits  6250
+                      00576 ;;      833: aopGet AOP_PCODE type PO_IMMEDIATE
+                      00577 ;;      _T2CONbits
+                      00578 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6275:genPackBits
+                      00579         .line   28; "Timer_delay.c"     TMR_DELAY_START;
+0040   15??           00580         BSF     _T2CONbits,2
+                      00581 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00582 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2760:genLabel *{*
+                      00583 ;; ***  genLabel  2763
+                      00584 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00585 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2528:genEndFunction *{*
+                      00586 ;; ***  genEndFunction  2530
+0041   0008           00587         RETURN  
+                      00588 ; exit point of _Delay_Start
+                      00589 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:7426:genpic14Code *{*
+                      00590 
+                      00591 ;***
+                      00592 ;  pBlock Stats: dbName = C
+                      00593 ;***
+                      00594 ;entry:  _Delay_Init    ;Function start
+                      00595 ; 2 exit points
+                      00596 ;has an exit
+                      00597 ;; Starting pCode block
+                      00598 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00599 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2760:genLabel *{*
+                      00600 ;; ***  genLabel  2763
+                      00601 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00602 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2340:genFunction *{*
+                      00603 ;; ***  genFunction  2342 curr label offset=0previous max_key=0 
+0042                  00604 _Delay_Init     ;Function start
+                      00605 ; 2 exit points
+                      00606 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00607 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00608 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6686:genPointerSet *{*
+                      00609 ;; ***  genPointerSet  6687
+                      00610 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6505:genNearPointerSet *{*
+                      00611 ;; ***  genNearPointerSet  6506
+                      00612 ;;      613
+                      00613 ;;      aopForRemat 392
+                      00614 ;;      418: rname _T2CONbits, val 0, const = 0
+                      00615 ;; ***  genNearPointerSet  6521
+                      00616 ;;      833: aopGet AOP_PCODE type PO_IMMEDIATE
+                      00617 ;;      _T2CONbits
+                      00618 ;;      line = 6523 result AOP_PCODE=_T2CONbits, size=2, left -=-, size=0, right AOP_LIT=0x01, size=1
+                      00619 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6249:genPackBits *{*
+                      00620 ;; ***  genPackBits  6250
+                      00621 ;;      833: aopGet AOP_PCODE type PO_IMMEDIATE
+                      00622 ;;      _T2CONbits
+                      00623 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6275:genPackBits
+                      00624         .line   16; "Timer_delay.c"     TMR_DELAY_SET_PRESCALER_16;
+0042   ???? ????      00625         BANKSEL _T2CONbits
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE 13
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+0044   14??           00626         BSF     _T2CONbits,1
+                      00627 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00628 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00629 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6686:genPointerSet *{*
+                      00630 ;; ***  genPointerSet  6687
+                      00631 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6505:genNearPointerSet *{*
+                      00632 ;; ***  genNearPointerSet  6506
+                      00633 ;;      613
+                      00634 ;;      aopForRemat 392
+                      00635 ;;      418: rname _T2CONbits, val 0, const = 0
+                      00636 ;; ***  genNearPointerSet  6521
+                      00637 ;;      833: aopGet AOP_PCODE type PO_IMMEDIATE
+                      00638 ;;      _T2CONbits
+                      00639 ;;      line = 6523 result AOP_PCODE=_T2CONbits, size=2, left -=-, size=0, right AOP_LIT=0x00, size=1
+                      00640 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6249:genPackBits *{*
+                      00641 ;; ***  genPackBits  6250
+                      00642 ;;      833: aopGet AOP_PCODE type PO_IMMEDIATE
+                      00643 ;;      _T2CONbits
+                      00644 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6275:genPackBits
+0045   10??           00645         BCF     _T2CONbits,0
+                      00646 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00647 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00648 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6686:genPointerSet *{*
+                      00649 ;; ***  genPointerSet  6687
+                      00650 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6505:genNearPointerSet *{*
+                      00651 ;; ***  genNearPointerSet  6506
+                      00652 ;;      613
+                      00653 ;;      aopForRemat 392
+                      00654 ;;      418: rname _T2CONbits, val 0, const = 0
+                      00655 ;; ***  genNearPointerSet  6521
+                      00656 ;;      833: aopGet AOP_PCODE type PO_IMMEDIATE
+                      00657 ;;      _T2CONbits
+                      00658 ;;      line = 6523 result AOP_PCODE=_T2CONbits, size=2, left -=-, size=0, right AOP_LIT=0x00, size=1
+                      00659 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6249:genPackBits *{*
+                      00660 ;; ***  genPackBits  6250
+                      00661 ;;      833: aopGet AOP_PCODE type PO_IMMEDIATE
+                      00662 ;;      _T2CONbits
+                      00663 ;; >>> /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:6275:genPackBits
+                      00664         .line   17; "Timer_delay.c"     TMR_DELAY_DISABLE;
+0046   11??           00665         BCF     _T2CONbits,2
+                      00666 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00667 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2760:genLabel *{*
+                      00668 ;; ***  genLabel  2763
+                      00669 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2316:resultRemat *{*
+                      00670 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:2528:genEndFunction *{*
+                      00671 ;; ***  genEndFunction  2530
+0047   0008           00672         RETURN  
+                      00673 ; exit point of _Delay_Init
+                      00674 ;;; /home/sdcc-builder/build/sdcc-build/orig/sdcc/src/pic14/gen.c:7426:genpic14Code *{*
+                      00675 
+                      00676 
+                      00677 ;       code size estimation:
+                      00678 ;          44+   14 =    58 instructions (  144 byte)
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE 14
+
+
+LOC    OBJECT CODE    LINE  SOURCE TEXT
+  VALUE
+
+                      00679 
+                      00680         end
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE 15
+
+
+SYMBOL TABLE
+  LABEL                             VALUE
+
+ACKDT                             00000005
+ACKEN                             00000004
+ACKSTAT                           00000006
+ADCON0                            0000001F
+ADCON1                            0000009F
+ADCS0                             00000006
+ADCS1                             00000007
+ADCS2                             00000006
+ADDEN                             00000003
+ADFM                              00000007
+ADIE                              00000006
+ADIF                              00000006
+ADON                              00000000
+ADRESH                            0000001E
+ADRESL                            0000009E
+BCLIE                             00000003
+BCLIF                             00000003
+BF                                00000000
+BRGH                              00000002
+C                                 00000000
+C1INV                             00000004
+C1OUT                             00000006
+C2INV                             00000005
+C2OUT                             00000007
+CCP1CON                           00000017
+CCP1IE                            00000002
+CCP1IF                            00000002
+CCP1M0                            00000000
+CCP1M1                            00000001
+CCP1M2                            00000002
+CCP1M3                            00000003
+CCP1X                             00000005
+CCP1Y                             00000004
+CCP2CON                           0000001D
+CCP2IE                            00000000
+CCP2IF                            00000000
+CCP2M0                            00000000
+CCP2M1                            00000001
+CCP2M2                            00000002
+CCP2M3                            00000003
+CCP2X                             00000005
+CCP2Y                             00000004
+CCPR1                             00000015
+CCPR1H                            00000016
+CCPR1L                            00000015
+CCPR2                             0000001B
+CCPR2H                            0000001C
+CCPR2L                            0000001B
+CHS0                              00000003
+CHS1                              00000004
+CHS2                              00000005
+CIS                               00000003
+CKE                               00000006
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE 16
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CKP                               00000004
+CM0                               00000000
+CM1                               00000001
+CM2                               00000002
+CMCON                             0000009C
+CMIE                              00000006
+CMIF                              00000006
+CREN                              00000004
+CSRC                              00000007
+CVR0                              00000000
+CVR1                              00000001
+CVR2                              00000002
+CVR3                              00000003
+CVRCON                            0000009D
+CVREN                             00000007
+CVROE                             00000006
+CVRR                              00000005
+D                                 00000005
+DATA_ADDRESS                      00000005
+DC                                00000001
+D_A                               00000005
+D_NOT_A                           00000005
+EEADR                             0000010D
+EEADRH                            0000010F
+EECON1                            0000018C
+EECON2                            0000018D
+EEDATA                            0000010C
+EEDATH                            0000010E
+EEIE                              00000004
+EEIF                              00000004
+EEPGD                             00000007
+F                                 00000001
+FERR                              00000002
+FSR                               00000004
+GCEN                              00000007
+GIE                               00000007
+GO                                00000002
+GO_DONE                           00000002
+GO_NOT_DONE                       00000002
+I2C_DATA                          00000005
+I2C_READ                          00000002
+I2C_START                         00000003
+I2C_STOP                          00000004
+IBF                               00000007
+IBOV                              00000005
+INDF                              00000000
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IRP                               00000007
+NOT_A                             00000005
+NOT_ADDRESS                       00000005
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE 17
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+NOT_BO                            00000000
+NOT_BOR                           00000000
+NOT_DONE                          00000002
+NOT_PD                            00000003
+NOT_POR                           00000001
+NOT_RBPU                          00000007
+NOT_RC8                           00000006
+NOT_T1SYNC                        00000002
+NOT_TO                            00000004
+NOT_TX8                           00000006
+NOT_W                             00000002
+NOT_WRITE                         00000002
+OBF                               00000006
+OERR                              00000001
+OPTION_REG                        00000081
+P                                 00000004
+PCFG0                             00000000
+PCFG1                             00000001
+PCFG2                             00000002
+PCFG3                             00000003
+PCL                               00000002
+PCLATH                            0000000A
+PCON                              0000008E
+PEIE                              00000006
+PEN                               00000002
+PIE1                              0000008C
+PIE2                              0000008D
+PIR1                              0000000C
+PIR2                              0000000D
+PORTA                             00000005
+PORTB                             00000006
+PORTC                             00000007
+PORTD                             00000008
+PORTE                             00000009
+PR2                               00000092
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+PSAVE                             00000000
+PSPIE                             00000007
+PSPIF                             00000007
+PSPMODE                           00000004
+R                                 00000002
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RA5                               00000005
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE 18
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RC0                               00000000
+RC1                               00000001
+RC2                               00000002
+RC3                               00000003
+RC4                               00000004
+RC5                               00000005
+RC6                               00000006
+RC7                               00000007
+RC8_9                             00000006
+RC9                               00000006
+RCD8                              00000000
+RCEN                              00000003
+RCIE                              00000005
+RCIF                              00000005
+RCREG                             0000001A
+RCSTA                             00000018
+RD                                00000000
+RD0                               00000000
+RD1                               00000001
+RD2                               00000002
+RD3                               00000003
+RD4                               00000004
+RD5                               00000005
+RD6                               00000006
+RD7                               00000007
+RE0                               00000000
+RE1                               00000001
+RE2                               00000002
+READ_WRITE                        00000002
+RP0                               00000005
+RP1                               00000006
+RSEN                              00000001
+RX9                               00000006
+RX9D                              00000000
+R_NOT_W                           00000002
+R_W                               00000002
+S                                 00000003
+SEN                               00000000
+SMP                               00000007
+SPBRG                             00000099
+SPEN                              00000007
+SREN                              00000005
+SSAVE                             00000000
+SSPADD                            00000093
+SSPBUF                            00000013
+SSPCON                            00000014
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE 19
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+SSPCON2                           00000091
+SSPEN                             00000005
+SSPIE                             00000003
+SSPIF                             00000003
+SSPM0                             00000000
+SSPM1                             00000001
+SSPM2                             00000002
+SSPM3                             00000003
+SSPOV                             00000006
+SSPSTAT                           00000094
+STATUS                            00000003
+STK00                             00000000
+STK01                             00000000
+STK02                             00000000
+STK03                             00000000
+STK04                             00000000
+STK05                             00000000
+STK06                             00000000
+STK07                             00000000
+STK08                             00000000
+STK09                             00000000
+STK10                             00000000
+STK11                             00000000
+STK12                             00000000
+SYNC                              00000004
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+T1CKPS0                           00000004
+T1CKPS1                           00000005
+T1CON                             00000010
+T1INSYNC                          00000002
+T1OSCEN                           00000003
+T1SYNC                            00000002
+T2CKPS0                           00000000
+T2CKPS1                           00000001
+T2CON                             00000012
+TMR0                              00000001
+TMR0IE                            00000005
+TMR0IF                            00000002
+TMR1                              0000000E
+TMR1CS                            00000001
+TMR1H                             0000000F
+TMR1IE                            00000000
+TMR1IF                            00000000
+TMR1L                             0000000E
+TMR1ON                            00000000
+TMR2                              00000011
+TMR2IE                            00000001
+TMR2IF                            00000001
+TMR2ON                            00000002
+TOUTPS0                           00000003
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE 20
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TOUTPS1                           00000004
+TOUTPS2                           00000005
+TOUTPS3                           00000006
+TRISA                             00000085
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISA5                            00000005
+TRISB                             00000086
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+TRISC                             00000087
+TRISC0                            00000000
+TRISC1                            00000001
+TRISC2                            00000002
+TRISC3                            00000003
+TRISC4                            00000004
+TRISC5                            00000005
+TRISC6                            00000006
+TRISC7                            00000007
+TRISD                             00000088
+TRISD0                            00000000
+TRISD1                            00000001
+TRISD2                            00000002
+TRISD3                            00000003
+TRISD4                            00000004
+TRISD5                            00000005
+TRISD6                            00000006
+TRISD7                            00000007
+TRISE                             00000089
+TRISE0                            00000000
+TRISE1                            00000001
+TRISE2                            00000002
+TRMT                              00000001
+TX8_9                             00000006
+TX9                               00000006
+TX9D                              00000000
+TXD8                              00000000
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXREG                             00000019
+TXSTA                             00000098
+UA                                00000001
+W                                 00000000
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE 21
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+WCOL                              00000007
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+WSAVE                             00000000
+Z                                 00000002
+_00001_DS_                        00000039
+_00121_DS_                        0000001A
+_00126_DS_                        0000000C
+_00128_DS_                        0000002A
+_00143_DS_                        00000017
+_ADCON0                           00000000
+_ADCON0bits                       00000000
+_ADCON1                           00000000
+_ADCON1bits                       00000000
+_ADRESH                           00000000
+_ADRESL                           00000000
+_BODEN_OFF                        00003FBF
+_BODEN_ON                         00003FFF
+_BOREN_OFF                        00003FBF
+_BOREN_ON                         00003FFF
+_CCP1CON                          00000000
+_CCP1CONbits                      00000000
+_CCP2CON                          00000000
+_CCP2CONbits                      00000000
+_CCPR1                            00000000
+_CCPR1H                           00000000
+_CCPR1L                           00000000
+_CCPR2                            00000000
+_CCPR2H                           00000000
+_CCPR2L                           00000000
+_CMCON                            00000000
+_CMCONbits                        00000000
+_CONFIG                           00002007
+_CPD_OFF                          00003FFF
+_CPD_ON                           00003EFF
+_CP_ALL                           00001FFF
+_CP_OFF                           00003FFF
+_CP_ON                            00001FFF
+_CVRCON                           00000000
+_CVRCONbits                       00000000
+_DEBUG_OFF                        00003FFF
+_DEBUG_ON                         000037FF
+_DEVID1                           00002006
+_Delay_Init                       00000042
+_Delay_Start                      0000003D
+_Delay_Stop                       0000002B
+_EEADR                            00000000
+_EEADRH                           00000000
+_EECON1                           00000000
+_EECON1bits                       00000000
+_EECON2                           00000000
+_EEDATA                           00000000
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE 22
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_EEDATH                           00000000
+_FOSC_EXTRC                       00003FFF
+_FOSC_HS                          00003FFE
+_FOSC_LP                          00003FFC
+_FOSC_XT                          00003FFD
+_FSR                              00000000
+_HS_OSC                           00003FFE
+_IDLOC0                           00002000
+_IDLOC1                           00002001
+_IDLOC2                           00002002
+_IDLOC3                           00002003
+_INDF                             00000000
+_INTCON                           00000000
+_INTCONbits                       00000000
+_LP_OSC                           00003FFC
+_LVP_OFF                          00003F7F
+_LVP_ON                           00003FFF
+_OPTION_REG                       00000000
+_OPTION_REGbits                   00000000
+_PCL                              00000000
+_PCLATH                           00000000
+_PCON                             00000000
+_PCONbits                         00000000
+_PIE1                             00000000
+_PIE1bits                         00000000
+_PIE2                             00000000
+_PIE2bits                         00000000
+_PIR1                             00000000
+_PIR1bits                         00000000
+_PIR2                             00000000
+_PIR2bits                         00000000
+_PORTA                            00000000
+_PORTAbits                        00000000
+_PORTB                            00000000
+_PORTBbits                        00000000
+_PORTC                            00000000
+_PORTCbits                        00000000
+_PORTD                            00000000
+_PORTDbits                        00000000
+_PORTE                            00000000
+_PORTEbits                        00000000
+_PR2                              00000000
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RCREG                            00000000
+_RCSTA                            00000000
+_RCSTAbits                        00000000
+_RC_OSC                           00003FFF
+_SPBRG                            00000000
+_SSPADD                           00000000
+_SSPBUF                           00000000
+_SSPCON                           00000000
+_SSPCON2                          00000000
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE 23
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_SSPCON2bits                      00000000
+_SSPCONbits                       00000000
+_SSPSTAT                          00000000
+_SSPSTATbits                      00000000
+_STATUS                           00000000
+_STATUSbits                       00000000
+_T1CON                            00000000
+_T1CONbits                        00000000
+_T2CON                            00000000
+_T2CONbits                        00000000
+_TMR0                             00000000
+_TMR1                             00000000
+_TMR1H                            00000000
+_TMR1L                            00000000
+_TMR2                             00000000
+_TMR_Delay_CheckOverFlow          0000002F
+_TMR_Delay_MS                     00000000
+_TRISA                            00000000
+_TRISAbits                        00000000
+_TRISB                            00000000
+_TRISBbits                        00000000
+_TRISC                            00000000
+_TRISCbits                        00000000
+_TRISD                            00000000
+_TRISDbits                        00000000
+_TRISE                            00000000
+_TRISEbits                        00000000
+_TXREG                            00000000
+_TXSTA                            00000000
+_TXSTAbits                        00000000
+_WDTE_OFF                         00003FFB
+_WDTE_ON                          00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_WRT_1FOURTH                      00003BFF
+_WRT_256                          00003DFF
+_WRT_HALF                         000039FF
+_WRT_OFF                          00003FFF
+_XT_OSC                           00003FFD
+__16F877A                         00000001
+__CODE_END                        00001FFF
+__CODE_START                      00000000
+__COMMON_RAM_END                  0000007F
+__COMMON_RAM_START                00000070
+__EEPROM_END                      000021FF
+__EEPROM_START                    00002100
+__VECTOR_INT                      00000004
+__VECTOR_RESET                    00000000
+__itoa                            00000000
+__ltoa                            00000000
+__print_format                    00000000
+__uitoa                           00000000
+__ultoa                           00000000
+gpasm-1.4.0 #1106 (Oct  6 2014) obj\Debug\Tim   3-31-2020  02:49:33         PAGE 24
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_abs                              00000000
+_atof                             00000000
+_atoi                             00000000
+_atol                             00000000
+_calloc                           00000000
+_free                             00000000
+_getchar                          00000000
+_gets                             00000000
+_labs                             00000000
+_malloc                           00000000
+_printf                           00000000
+_printf_small                     00000000
+_putchar                          00000000
+_puts                             00000000
+_rand                             00000000
+_realloc                          00000000
+_sprintf                          00000000
+_srand                            00000000
+_vprintf                          00000000
+_vsprintf                         00000000
+r0x1000                           00000000
+r0x1001                           00000002
+r0x1002                           00000001
+r0x1003                           00000003
+r0x1004                           00000004
+r0x1005                           00000005
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :     0 reported,     0 suppressed
+
+

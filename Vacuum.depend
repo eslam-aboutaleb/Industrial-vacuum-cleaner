@@ -1,0 +1,99 @@
+# depslib dependency file v1.0
+1585000359 source:c:\users\dell\documents\vacuum\display.c
+	"Main.h"
+	"SSD.h"
+	"Timer.h"
+	"Display.h"
+	"SW.h"
+	"Led.h"
+	"VC.h"
+
+1585073121 c:\users\dell\documents\vacuum\main.h
+	<pic16f877a.h>
+	<stdio.h>
+	<stdlib.h>
+
+1584588918 c:\users\dell\documents\vacuum\ssd.h
+	"Main.h"
+	"Port.h"
+
+1584992219 c:\users\dell\documents\vacuum\port.h
+	"Main.h"
+
+1585067022 c:\users\dell\documents\vacuum\timer.h
+	"Main.h"
+
+1499466232 c:\users\dell\documents\vacuum\display.h
+
+1584560585 c:\users\dell\documents\vacuum\sw.h
+
+1584734416 c:\users\dell\documents\vacuum\led.h
+
+1584987907 c:\users\dell\documents\vacuum\vc.h
+
+1585490870 source:c:\users\dell\documents\vacuum\led.c
+	"Main.h"
+	"Port.h"
+	"Led.h"
+
+1585492616 source:c:\users\dell\documents\vacuum\main.c
+	"Main.h"
+	"Port.h"
+	"Display.h"
+	"VC.h"
+	"Timer.h"
+	"Timer_delay.h"
+
+1585073133 c:\users\dell\documents\vacuum\timer_delay.h
+	"Main.h"
+
+1585491066 source:c:\users\dell\documents\vacuum\motor.c
+	"Main.h"
+	"Port.h"
+	"Timer.h"
+	"Motor.h"
+	"VC.h"
+	"Timer_delay.h"
+
+1584737137 c:\users\dell\documents\vacuum\motor.h
+
+1584989702 source:c:\users\dell\documents\vacuum\ssd.c
+	"Main.h"
+	"Port.h"
+	"Timer.h"
+	"SSD.h"
+
+1584989996 source:c:\users\dell\documents\vacuum\sw.c
+	"Main.h"
+	"Port.h"
+	"Timer.h"
+	"SW.h"
+
+1585073150 source:c:\users\dell\documents\vacuum\timer.c
+	"Main.h"
+	"Timer.h"
+	"SW.h"
+	"Display.h"
+	"SSD.h"
+	"Motor.h"
+	"VC.h"
+
+1585080277 source:c:\users\dell\documents\vacuum\timer_delay.c
+	"Timer_delay.h"
+	"Main.h"
+
+1576247922 source:c:\users\dell\documents\vacuum\util.c
+	"Main.h"
+	"Util.h"
+
+1584735079 c:\users\dell\documents\vacuum\util.h
+	"Main.h"
+
+1585073276 source:c:\users\dell\documents\vacuum\vc.c
+	"VC.h"
+	"Motor.h"
+	"SW.h"
+	"Main.h"
+	"Timer.h"
+	"Timer_delay.h"
+

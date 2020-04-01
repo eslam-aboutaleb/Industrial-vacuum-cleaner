@@ -12,7 +12,7 @@ Date: 30/3/2020
 
 /*Time macros used in the module*/
 #define MOTOR_PERIOD_MS              (10)
-#define HARMONIC_PERIOD_MS           (10)
+#define HARMONIC_PERIOD_MS           (20)
 #define KURZ_DELTA                   (5)
 #define MOTOR_SOFT_SWitCH_PERIOD_MS  (40)
 #define TON_MIN                      (3)
@@ -259,13 +259,13 @@ static void Motor_Sequence(tByte Changing_Flag,tVC_Speed Speed_TWO)
     /*Flag indicates if shifting to target speed has completed*/
     static tByte Change_StateFlag=0;
     /* Flag indicates the required TON has not reached yet*/
-    static Resume_Switch=0;
+    static tByte Resume_Switch=0;
     /*Counter to indicate if the time of soft switch delay has met*/
     static tByte SoftSwitch_Counter=0;
     /*Counter used to move the angle of the motor gradually*/
-    static ShiftAngleCounter=0;
+    static tWord ShiftAngleCounter=0;
 
-/* /////////////////////////////////////////////////////////////////////////////////////// */
+
 /*If the two speeds are different or the target angel is not been reached yet
   it starts the soft switch sequence                                         */
     if(Changing_Flag!=1 || Resume_Switch==1)
@@ -279,6 +279,7 @@ static void Motor_Sequence(tByte Changing_Flag,tVC_Speed Speed_TWO)
         SoftSwitch_Counter=0;
 /* /////////////////////////////////////////////////////////////////////////////////////////////// */
                                         /*Minimum speed State*/
+               /*It increases the TON gradually until it reaches the required time*/
 /* /////////////////////////////////////////////////////////////////////////////////////////////// */
     if(Speed_TWO==VC_MIN_Speed)
     {
@@ -314,6 +315,7 @@ static void Motor_Sequence(tByte Changing_Flag,tVC_Speed Speed_TWO)
 
 /* /////////////////////////////////////////////////////////////////////////////////////////////// */
                                         /*Medium speed State*/
+               /*It increases the TON gradually until it reaches the required time*/
 /* /////////////////////////////////////////////////////////////////////////////////////////////// */
     if(Speed_TWO==VC_MED_Speed)
     {
@@ -347,6 +349,7 @@ static void Motor_Sequence(tByte Changing_Flag,tVC_Speed Speed_TWO)
 
 /* /////////////////////////////////////////////////////////////////////////////////////////////// */
                                         /*Maximum speed State*/
+                        /*It increases the TON gradually until it reaches the required time*/
 /* /////////////////////////////////////////////////////////////////////////////////////////////// */
     else if(Speed_TWO==VC_MAX_Speed)
     {
@@ -384,7 +387,9 @@ static void Motor_Sequence(tByte Changing_Flag,tVC_Speed Speed_TWO)
         return;
 }
 /*End of Non-equal speed condition*/
-
+/* ////////////////////////////////////////////////////////////////////////////////////////
+   If the last speed and the current speed are the same stay on the same TON
+/////////////////////////////////////////////////////////////////////////////////////// */
 /*Check if the TON has been reached & the Two speeds are equal*/
     else if(Changing_Flag==1 && Change_StateFlag==1)
     {
@@ -423,6 +428,11 @@ job: checks TON of the motor and returns the current speed of the motor
 ///////////////////////////////////////////////////////////////////////////////////////// */
 tMotor_Angel Motor_GetAngel(void)
 {
+    /* /////////////////////////////////////////////////////////////////////////////
+       The minimum speed at 140 so any angel under the TON of minimum speed will
+       be considered as 170 as the application cares about the time line before
+       minimum speed and after achieving minimum speed.
+    //////////////////////////////////////////////////////////////////////////// */
     if(Angel<TON_MIN)
     {
         return Angel_170;
@@ -459,6 +469,7 @@ job: 1-Motor_Update should be called every 10 ms
 ///////////////////////////////////////////////////////////////////////////////////////// */
 void Motor_Update(void)
 {
+    static tWord Motor_Firing_Counter=0;
     static tWord Motor_Harmonic_counter=0;
     static tByte HarmonicFlag=0;
     static tVC_Speed VC_LocalCur_Speed=VC_STOP;
@@ -467,33 +478,48 @@ void Motor_Update(void)
 /* /////////////////////////////////////////////////////////////////////////////////////
                          Applying Kurz industrial solution
 ///////////////////////////////////////////////////////////////////////////////////// */
-    Motor_Harmonic_counter += TMR_TICK_MS;
-    /* Check if is it time for the Motor_Update to run */
-    if(HarmonicFlag==0)
-   {
-    if(Motor_Harmonic_counter != HARMONIC_PERIOD_MS)
-    {
-        return;
-    }
-    else
-    {
-        HarmonicFlag=1;
-    }
-   }
 
-    /*To apply Kurz method increase counter & period by 5 */
-    if(HarmonicFlag==1)
-   {
-       Motor_Harmonic_counter +=  KURZ_DELTA;
-    if(Motor_Harmonic_counter != (HARMONIC_PERIOD_MS+KURZ_DELTA))
-    {
+    /*Increase Motor firing counter(*/
+    Motor_Firing_Counter += TMR_TICK_MS;
+    /* Increase Harmonic counter until it meets Harmonic period*/
+    Motor_Harmonic_counter += TMR_TICK_MS;
+    /*Check if the counter is 0 and period is the same*/
+if(HarmonicFlag==0)
+{
+     if(Motor_Firing_Counter != MOTOR_PERIOD_MS)
+     {
         return;
-    }
-    else
-    {
-        HarmonicFlag=0;
-    }
-   }
+     }
+     Motor_Firing_Counter=0;
+}
+    /*Check if the counter and period is
+      increased by Kurz delta           */
+if(HarmonicFlag==1)
+{
+    if(Motor_Firing_Counter != MOTOR_PERIOD_MS+KURZ_DELTA)
+     {
+        return;
+     }
+     Motor_Firing_Counter=0;
+}
+
+/* //////////////////////////////////////////////////////////////////// */
+
+     /* If it passed HARMONIC_PERIOD_MS, increase the Firing
+        counter in the next tick by Kurz delta              */
+     if(Motor_Harmonic_counter != HARMONIC_PERIOD_MS)
+     {
+
+     }
+     else
+     {
+        Motor_Harmonic_counter=0;
+        /*When it passes Harmonic period 20 ms*/
+        HarmonicFlag=1;
+        Motor_Firing_Counter += KURZ_DELTA;
+     }
+
+
 
    /*Clear the counter*/
    Motor_Harmonic_counter=0;
@@ -501,18 +527,21 @@ void Motor_Update(void)
 /* ////////////////////////////////////////////////////////////////////////////// */
 
    /*Compare between new speeds*/
-
+   /*Initial speed is medium speed*/
    if(VC_Cur_Speed==VC_STOP)
     {
     VC_LocalCur_Speed=VC_STOP;
-    VC_Cur_Speed=VC_MIN_Speed;
+    VC_Cur_Speed=VC_MED_Speed;
     }
 
    /*Fire the motor*/
    Motor_Sequence(
+                  /*Check if the new speed is the same as current
+                    speed or not                                 */
                    Motor_CMPSpeed(VC_Cur_Speed,VC_LocalCur_Speed)
+                  /*Apply the new speed to the motor*/
                   ,VC_Cur_Speed
                  );
-   /*Assign the last speed as the current speed of VC*/
+   /*Assign the last speed as the local current speed of VC to be compared the next tick*/
    VC_LocalCur_Speed=VC_GetSpeed();
 }

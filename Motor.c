@@ -501,6 +501,7 @@ if(HarmonicFlag==1)
         return;
      }
      Motor_Firing_Counter=0;
+     HarmonicFlag=0;
 }
 
 /* //////////////////////////////////////////////////////////////////// */
@@ -521,8 +522,6 @@ if(HarmonicFlag==1)
 
 
 
-   /*Clear the counter*/
-   Motor_Harmonic_counter=0;
 
 /* ////////////////////////////////////////////////////////////////////////////// */
 

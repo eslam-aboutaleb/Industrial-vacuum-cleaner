@@ -67,3 +67,23 @@ void TMR_Delay_MS(tWord delay)
         TMR_DELAY_UPDATE_REG_VAL(132);
     }
 }
+
+/* /////////////////////////////////////////////////////////////////////////////////
+Func: TMR_Delay_US
+Parameters: void
+Return: void
+job: Starts the timer and generate delay in microseconds multiplied by delay value
+///////////////////////////////////////////////////////////////////////////////// */
+void TMR_Delay_100US(tWord delay)
+{
+    tByte count=0;
+    tWord index=0;
+    TMR_DELAY_REG_VAL(251);
+    for(count=0;count<delay;count++)
+    {
+        Delay_Start();
+        while(TMR_Delay_CheckOverFlow()==0);
+        Delay_Stop();
+        TMR_DELAY_UPDATE_REG_VAL(252);
+    }
+}

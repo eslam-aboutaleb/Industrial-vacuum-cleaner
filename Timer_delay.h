@@ -12,6 +12,7 @@ void Delay_Start(void);
 tByte TMR_Delay_CheckOverFlow(void);
 void Delay_Stop(void);
 void TMR_Delay_MS(tWord delay);
+void TMR_Delay_100US(tWord delay);
 
 
 

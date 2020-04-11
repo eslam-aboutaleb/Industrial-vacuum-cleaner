@@ -11,21 +11,42 @@ Date: 30/3/2020
 #include "Timer_delay.h"
 
 /*Time macros used in the module*/
-#define MOTOR_PERIOD_MS              (10)
-#define HARMONIC_PERIOD_MS           (20)
-#define KURZ_DELTA                   (5)
-#define MOTOR_SOFT_SWitCH_PERIOD_MS  (40)
-#define TON_MIN                      (3)
-#define TON_MED                      (5)
-#define TON_MAX                      (9)
+#define MOTOR_PERIOD_MS               (10)
+#define HARMONIC_PERIOD_MS            (20)
+#define KURZ_DELTA                    (5)
+#define MOTOR_SOFT_SWitCH_PERIOD_MS   (40)
 
+/*Pulse delay in ms*/
+#define MIN_TON_MS                    (8)
+#define MED_TON_MS                    (5)
+#define MAX_TON_MS                    (1)
+#define STOP_TON_MS                   (9)
+
+/*pulse delay in us divided by 100*/
+#define FULL_WAVE_Delay               (100)
+#define MAX_Delay                     (10)
+#define MED_Delay                     (50)
+#define MIN_Delay                     (80)
+#define STOP_Delay                    (90)
 
 /*Local functions prototype*/
 static void Motor_Sequence(tByte Changing_Flag,tVC_Speed Speed_TWO);
 static tByte Motor_CMPSpeed(tVC_Speed Speed_ONE,tVC_Speed Speed_TWO);
+static void Motor_Out(tMotor Motor);
+static void Motor_Stop(tMotor Motor);
+static void Motor_MinSpeed(void);
+static void Motor_MedSpeed(void);
+static void Motor_MaxSpeed(void);
+static void Motor_StopSpeed(void);
+
+
+
 
 /* local variable used to indicates the current angel upon TON of the motor*/
-static tWord Angel=0;
+static tMotor_Angel Angel=Angel_IDLE;
+/*Local variable as flag to continue the current soft switching*/
+static tWord Resume_Switch=1;
+
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 Function: Motor_Init
 Parameters: Motor from type structure tMotor
@@ -193,7 +214,7 @@ Parameters: Motor from type structure tMotor
 return: void
 function job: Stop Motor
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-void Motor_Stop(tMotor Motor)
+static void Motor_Stop(tMotor Motor)
 {
     switch (Motor)
     {
@@ -219,9 +240,22 @@ Parameters: Motor from type structure tMotor
 return: void
 function job: Start the motor in clockwise direction
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-void Motor_Out(tMotor Motor)
+static void Motor_Out(tMotor Motor)
 {
     Motor_SetState(Motor,Motor_ON,Motor_ClockWise);
+}
+
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+Function: Motor_FirePulse
+Parameters: Motor from type structure tMotor
+return: void
+function job: specific function to the application turns on motor for 100 us
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+static void Motor_FirePulse(tMotor Motor)
+{
+    Motor_Out(Motor);
+    TMR_Delay_100US(1);
+    Motor_Stop(Motor);
 }
 
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -241,6 +275,43 @@ static tByte Motor_CMPSpeed(tVC_Speed Speed_ONE,tVC_Speed Speed_TWO)
         return 0;
     }
 }
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                      Motor Speed functions
+1-Function: Motor_MinSpeed
+2-Function: Motor_MedSpeed
+3-Function: Motor_MaxSpeed
+4-Function: Motor_StopSpeed
+
+Parameters: void
+return: void
+function job: Fire motor pulse according to its current speed
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+static void Motor_MinSpeed(void)
+{
+	TMR_Delay_MS(MIN_TON_MS);
+	Motor_FirePulse(Motor_1);
+
+}
+static void Motor_MedSpeed(void)
+{
+	TMR_Delay_MS(MED_TON_MS);
+	Motor_FirePulse(Motor_1);
+
+}
+static void Motor_MaxSpeed(void)
+{
+	TMR_Delay_MS(MAX_TON_MS);
+	Motor_FirePulse(Motor_1);
+
+}
+static void Motor_StopSpeed(void)
+{
+	TMR_Delay_MS(STOP_TON_MS);
+	Motor_FirePulse(Motor_1);
+
+}
+
+
 
 /* ////////////////////////////////////////////////////////////////////////////////////////
 Function:   Motor_Sequence
@@ -249,175 +320,168 @@ Return:     void
 job:
      1-Check if there is change in VC speed if there one
          -Start soft switching from the current speed to the target speed, every 40 ms will
-         increase the pulse an angle until it reaches the the right angle.
+         increase the pulse an angle until it reaches the the required angle.
      2-If there is n't  change in VC speed
-         -Run the motor with its current ON time.
+         -Run the motor with its current angel.
 ///////////////////////////////////////////////////////////////////////////////////////// */
 static void Motor_Sequence(tByte Changing_Flag,tVC_Speed Speed_TWO)
 {
-    static tWord TON=0;
     /*Flag indicates if shifting to target speed has completed*/
     static tByte Change_StateFlag=0;
-    /* Flag indicates the required TON has not reached yet*/
-    static tByte Resume_Switch=0;
     /*Counter to indicate if the time of soft switch delay has met*/
-    static tByte SoftSwitch_Counter=0;
-    /*Counter used to move the angle of the motor gradually*/
-    static tWord ShiftAngleCounter=0;
-
-
+    static tWord SoftSwitch_Counter=0;
+    /*Start delay as full wave 10 ms*/
+    static tByte Start_Delay=FULL_WAVE_Delay;
+/*Force the soft switching state if the two speeds are not the same*/
+    if(Changing_Flag!=1){Resume_Switch=1;}
 /*If the two speeds are different or the target angel is not been reached yet
   it starts the soft switch sequence                                         */
-    if(Changing_Flag!=1 || Resume_Switch==1)
+    if(Changing_Flag!=1 ||Resume_Switch==1)
     {
         SoftSwitch_Counter += MOTOR_PERIOD_MS;
     /*To move 1 angle it take 40 ms so to move 30 angle it takes 1200 ms and sub TON */
-    if(SoftSwitch_Counter==MOTOR_SOFT_SWitCH_PERIOD_MS)
-    {
-        return;
-    }
-        SoftSwitch_Counter=0;
-/* /////////////////////////////////////////////////////////////////////////////////////////////// */
-                                        /*Minimum speed State*/
-               /*It increases the TON gradually until it reaches the required time*/
-/* /////////////////////////////////////////////////////////////////////////////////////////////// */
-    if(Speed_TWO==VC_MIN_Speed)
-    {
-            if(TON==TON_MIN)
+       if(SoftSwitch_Counter!= MOTOR_SOFT_SWitCH_PERIOD_MS)
+         {
+          return;
+         }
+         /*Assign zero to the counter*/
+         SoftSwitch_Counter=0;
+        /*Minimum speed soft switching state*/
+        if(Speed_TWO==VC_MIN_Speed)
+        {
+            /*terminate soft switching if it reaches the assigned time*/
+            if(Start_Delay==MIN_Delay)
             {
                 Resume_Switch=0;
                 Change_StateFlag=1;
             }
-        else
-        {
-            /*Increase ShiftAngleCounter by 1 */
-            ShiftAngleCounter+=1;
-            /*Continue the condition*/
+            else
+            {
+            /*Continue the soft switching*/
             Resume_Switch=1;
             Change_StateFlag=0;
-            /*Every 40 MS ShiftAngleCounter will be increased by 1 until it reaches
-              10 Counts to soft switch to angle 10 after 400 ms                 */
-            if(ShiftAngleCounter==10)
-            {
-            ShiftAngleCounter=0;
-             if(TON<TON_MIN)
-             {
-                TON++;
-             }
-             else if(TON>TON_MIN)
-             {
-                TON--;
-             }
-            }
-        }
-        /*To move from angle 170 to 140*/
-    }
 
-/* /////////////////////////////////////////////////////////////////////////////////////////////// */
-                                        /*Medium speed State*/
-               /*It increases the TON gradually until it reaches the required time*/
-/* /////////////////////////////////////////////////////////////////////////////////////////////// */
-    if(Speed_TWO==VC_MED_Speed)
-    {
-        /*To move from angle 140 to 90*/
-            if(TON==TON_MED)
+            if(Start_Delay>MIN_Delay)
             {
-                Resume_Switch=0;
-                Change_StateFlag=1;
+                Start_Delay-=1;
             }
-        else
-        {
-            ShiftAngleCounter+=1;
-            Resume_Switch=1;
-            Change_StateFlag=0;
-            /*Every 40 MS ShiftAngleCounter will be increased by 1 until it reaches
-              50 Counts to soft switch to angle 10 after 2000 ms                 */
-             if(ShiftAngleCounter==50)
+            else if(Start_Delay<MIN_Delay)
             {
-             ShiftAngleCounter=0;
-             if(TON<TON_MED)
-             {
-                TON++;
-             }
-             else if(TON>TON_MED)
-             {
-                TON--;
-             }
-            }
-        }
-    }
+                Start_Delay+=1;
 
-/* /////////////////////////////////////////////////////////////////////////////////////////////// */
-                                        /*Maximum speed State*/
-                        /*It increases the TON gradually until it reaches the required time*/
-/* /////////////////////////////////////////////////////////////////////////////////////////////// */
-    else if(Speed_TWO==VC_MAX_Speed)
-    {
-        /*To move from angle 140 to 10*/
-            if(TON==TON_MAX)
+            }
+            }
+
+        }
+        /*End of Minimum speed state*/
+/* ////////////////////////////////////////// */
+
+        /*minimum speed soft switching*/
+        if(Speed_TWO==VC_MED_Speed)
+        {
+             /*terminate soft switching if it reaches the assigned time*/
+            if(Start_Delay==MED_Delay)
             {
                 Resume_Switch=0;
                 Change_StateFlag=1;
             }
-        else
-        {
-            ShiftAngleCounter+=1;
+            else
+            {
+            /*Continue the soft switching*/
             Resume_Switch=1;
             Change_StateFlag=0;
-            /*Every 40 MS ShiftAngleCounter will be increased by 1 until it reaches
-              80 Counts to soft switch to angle 10 after 3200 ms                 */
-            if(ShiftAngleCounter==80)
-            {
-              ShiftAngleCounter=0;
-              if(TON<TON_MAX)
+
+              if(Start_Delay>MED_Delay)
               {
-                TON++;
+                Start_Delay-=1;
               }
-              else if(TON>TON_MAX)
-             {
-                TON--;
-             }
+              else if(Start_Delay<MED_Delay)
+              {
+                Start_Delay+=1;
+              }
+
+            }
+
+        }
+        /*End of Medium speed state*/
+/* ////////////////////////////////////////// */
+
+        /*Maximum speed soft switching*/
+        if(Speed_TWO==VC_MAX_Speed)
+        {
+           /*terminate soft switching if it reaches the assigned time*/
+            if(Start_Delay==MAX_Delay)
+            {
+                Resume_Switch=0;
+                Change_StateFlag=1;
+            }
+            else
+            {
+            /*Continue the soft switching*/
+              Resume_Switch=1;
+              Change_StateFlag=0;
+
+              if(Start_Delay>MAX_Delay)
+              {
+                Start_Delay-=1;
+              }
+              else if(Start_Delay<MAX_Delay)
+              {
+                Start_Delay+=1;
+              }
+
             }
         }
+
+        /*End of Maximum speed state*/
+/* ////////////////////////////////////////// */
+
+/*Every 40 milliseconds will change start delay
+  Motor pulse is 100 micro seconds so the angle is considered as 100 US
+  by this method the angle 90 will be reached from angle 180(before Turning on the VC)
+  in 3600 ms
+                                                                        */
+        TMR_Delay_100US(Start_Delay);
+        Motor_FirePulse(Motor_1);
+        /*terminate the task after pulse*/
+        return;
     }
 
-        Motor_Out(Motor_1);
-        TMR_Delay_MS(TON);
-        Motor_Stop(Motor_1);
-        return;
-}
-/*End of Non-equal speed condition*/
 /* ////////////////////////////////////////////////////////////////////////////////////////
    If the last speed and the current speed are the same stay on the same TON
 /////////////////////////////////////////////////////////////////////////////////////// */
 /*Check if the TON has been reached & the Two speeds are equal*/
-    else if(Changing_Flag==1 && Change_StateFlag==1)
+   else if(Changing_Flag==1 && Change_StateFlag==1)
     {
         if(Speed_TWO==VC_MIN_Speed)
         {
-        TON=TON_MIN;
+        Motor_MinSpeed();
         /*To move from angle 170 to 140*/
+        Angel=Angel_MIN;
         }
 
     /*Medium speed*/
-    else if(Speed_TWO==VC_MED_Speed)
-    {
+        else if(Speed_TWO==VC_MED_Speed)
+        {
         /*To move from angle 140 to 90*/
-        TON=TON_MED;
-    }
+        Motor_MedSpeed();
+        Angel=Angel_MED;
+        }
 
     /*Maximum speed*/
-    else if(Speed_TWO==VC_MAX_Speed)
-    {
-        TON=TON_MAX;
+        else if(Speed_TWO==VC_MAX_Speed)
+        {
+        /*To move to angle 10*/
+        Motor_MaxSpeed();
+        Angel=Angel_MAX;
 
+        }
+        else
+        {
+        Motor_StopSpeed();
+        Angel=Angel_STOP;
+        }
     }
-
-    }
-    Angel=TON;
-        Motor_Out(Motor_1);
-        TMR_Delay_MS(TON);
-        Motor_Stop(Motor_1);
 }
 
 /* ////////////////////////////////////////////////////////////////////////////////////////
@@ -428,34 +492,10 @@ job: checks TON of the motor and returns the current speed of the motor
 ///////////////////////////////////////////////////////////////////////////////////////// */
 tMotor_Angel Motor_GetAngel(void)
 {
-    /* /////////////////////////////////////////////////////////////////////////////
-       The minimum speed at 140 so any angel under the TON of minimum speed will
-       be considered as 170 as the application cares about the time line before
-       minimum speed and after achieving minimum speed.
-    //////////////////////////////////////////////////////////////////////////// */
-    if(Angel<TON_MIN)
-    {
-        return Angel_170;
-    }
-    else if(Angel==TON_MIN || (Angel<TON_MED&&Angel>TON_MED))
-    {
-        return Angel_140;
-    }
-    else if(Angel==TON_MED || (Angel>TON_MIN&&Angel<TON_MAX))
-    {
-        return Angel_90;
-    }
-    else if(Angel==TON_MAX)
-    {
-        return Angel_10;
-    }
-    else
-    {
-        /*No Action*/
-    }
-    return 0;
+    return Angel;
 }
 
+/*the current VC speed*/
 extern tVC_Speed VC_Cur_Speed;
 /* ////////////////////////////////////////////////////////////////////////////////////////
 Function:   Motor_Update
@@ -520,9 +560,6 @@ if(HarmonicFlag==1)
         Motor_Firing_Counter += KURZ_DELTA;
      }
 
-
-
-
 /* ////////////////////////////////////////////////////////////////////////////// */
 
    /*Compare between new speeds*/
@@ -533,8 +570,9 @@ if(HarmonicFlag==1)
     VC_Cur_Speed=VC_MED_Speed;
     }
 
+
    /*Fire the motor*/
-   Motor_Sequence(
+    Motor_Sequence(
                   /*Check if the new speed is the same as current
                     speed or not                                 */
                    Motor_CMPSpeed(VC_Cur_Speed,VC_LocalCur_Speed)

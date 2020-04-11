@@ -7,6 +7,7 @@ Date: 30/3/2020
 #include "Port.h"
 #include "Display.h"
 #include "VC.h"
+#include "SW.h"
 #include "Timer.h"
 #include "Timer_delay.h"
 /*System clock*/
@@ -17,7 +18,7 @@ tWord __at(0x2007) CONFIG = _HS_OSC & _WDT_OFF & _PWRTE_ON & _BODEN_OFF & _LVP_O
 /* ////////////////////////////////////////////////////////////////////////////////////
 
 The vacuum cleaner has 3 speeds it starts with stop speed which at angle 170
-the it soft switches to minimum speed which at angle 140 which it is the starting
+then it soft switches to minimum speed which at angle 140 which it is the starting
 speed in the vacuum.
 
 The vacuum has three switches:
@@ -72,9 +73,12 @@ void main(void)
     DISP_Init();
     /*Start Timer*/
     TMR_Start();
+    /*Initialize VC SWs*/
+    SW_Init();
+    /*Initialize Delay timer*/
+    Delay_Init();
 
     while(1)
     {
-        /* Background program*/
     }
 }

@@ -29,10 +29,11 @@ typedef enum
 
 typedef enum
 {
-    Angel_170,
-    Angel_140,
-    Angel_90 ,
-    Angel_10
+    Angel_IDLE=180,
+    Angel_STOP=170,
+    Angel_MIN =140,
+    Angel_MED =90 ,
+    Angel_MAX =10
 }tMotor_Angel;
 
 /*Motor info: State & Direction*/
@@ -46,9 +47,7 @@ typedef struct
 void Motor_Init(tMotor Motor);
 void Motor_SetState(tMotor Motor,tMotor_State State,tMotor_Direction Direction);
 tMotor_Info * Motor_GetState(tMotor Motor);
-void Motor_Stop(tMotor Motor);
 void Motor_Update(void);
-void Motor_Out(tMotor Motor);
 tMotor_Angel Motor_GetAngel(void);
 
 #endif // MOTOR_H_

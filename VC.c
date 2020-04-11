@@ -8,11 +8,12 @@ Date: 30/3/2020
 #include "SW.h"
 #include "Main.h"
 #include "Timer.h"
-#include "Timer_delay.h"
+
 #define VC_PERIOD_MS    (20)
 #define D_PRESS_TIME_MS (30000)
 
-/*Initial VC speed is stopped at angle 170*/
+/*Initialize VC speed as stopped at angle 170*/
+/*Global variable is used in multiple files to detect current VC speed*/
 tVC_Speed VC_Cur_Speed=VC_STOP;
 
 
@@ -26,9 +27,7 @@ void VC_Init(void)
 {
     /*Initialize VC motor*/
     Motor_Init(Motor_1);
-    /*Initialize VC SWs*/
-    SW_Init();
-    Delay_Init();
+
 }
 
 /* ////////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +51,6 @@ void VC_Update(void)
 {
     static tWord VC_Counter=0;
     static tWord D_SW_Counter=0;
-    tByte index;
 
     VC_Counter += TMR_TICK_MS;
     /* Check if it is time for the VC_Update to run */
@@ -62,11 +60,8 @@ void VC_Update(void)
     }
     VC_Counter=0;
 
-    for(index=SW_PLUS;index<N_SWITCHES;index++)
-    {
-        switch(index)
-        {
-        case SW_PLUS:
+
+         /* if SW_PLUS has been pressed it increases the speed of VC*/
             if(SW_GetState(SW_PLUS)==SW_PRE_PRESSED)
             {
                 if(VC_Cur_Speed<VC_MAX_Speed)
@@ -82,9 +77,8 @@ void VC_Update(void)
             {
                 /*No Action*/
             }
-            break;
 
-        case SW_MINUS:
+         /* if SW_MINUS has been pressed it decreases the speed of VC*/
             if(SW_GetState(SW_MINUS)==SW_PRE_PRESSED)
             {
                 if(VC_Cur_Speed>VC_MIN_Speed)
@@ -100,9 +94,7 @@ void VC_Update(void)
             {
                 /*No Action*/
             }
-            break;
-
-        case SW_D:
+        /* if SW_D has been pressed it decreases the speed of VC after being pressed for 30 secs*/
             if(SW_GetState(SW_D)==SW_PRESSED)
             {
                 D_SW_Counter+=VC_PERIOD_MS;
@@ -125,15 +117,12 @@ void VC_Update(void)
                     /*No Action*/
                 }
             }
+            /*No button is pressed*/
             else
             {
                 /*No Action*/
             }
-            break;
 
-        default:
-            /*No Action*/
-            break;
-        }
+
     }
-}
+
